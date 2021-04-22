@@ -1,0 +1,12 @@
+CREATE TABLE `taxi` (
+	`tpep_pickup_datetime` DATETIME NOT NULL,
+	`tpep_dropoff_datetime` DATETIME NOT NULL,
+	`passenger_count` TINYINT NOT NULL DEFAULT 0,
+	`trip_distance` FLOAT NOT NULL DEFAULT 0,
+	`PULocationID` SMALLINT NOT NULL DEFAULT 0,
+	`DOLocationID` SMALLINT NOT NULL DEFAULT 0,
+	`total_amount` FLOAT NOT NULL DEFAULT 0
+)
+COLLATE='utf8_general_ci'
+;
+SELECT `DEFAULT_COLLATION_NAME` FROM `information_schema`.`SCHEMATA` WHERE `SCHEMA_NAME`='yazlab_2_2';
