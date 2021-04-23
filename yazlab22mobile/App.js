@@ -12,7 +12,9 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Type1 from './screens/type1';
+import Type1 from './src/screens/type1';
+import Type2 from './src/screens/type2';
+import Type3 from './src/screens/type3';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,8 @@ export default function App() {
         headerShown: false
       }}>
         <Stack.Screen name="Tip 1" component={Type1} />
+        <Stack.Screen name="Tip 2" component={Type2} />
+        <Stack.Screen name="Tip 3" component={Type3} />
       </Stack.Navigator>
     </NavigationContainer>
   );

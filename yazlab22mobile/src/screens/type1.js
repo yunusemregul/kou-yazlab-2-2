@@ -6,7 +6,8 @@ import {
 } from 'react-native';
 import MySqlConnection from 'react-native-my-sql-connection';
 import { Row, Rows, Table, TableWrapper } from 'react-native-table-component';
-import { mysqlConfig } from '../App';
+import { mysqlConfig } from '../../App';
+import PreviousNextButton from '../components/PreviousNextButton';
 
 const query = 'SELECT tpep_pickup_datetime, trip_distance FROM taxi ORDER BY trip_distance DESC LIMIT 5';
 
@@ -14,7 +15,6 @@ export default function Type1({ navigation }) {
     const [queryResult, setQueryResult] = useState(null);
 
     async function runQuery() {
-        console.log('hello');
         try {
             const connection = await MySqlConnection.createConnection(mysqlConfig);
             let res = await connection.executeQuery(query);
@@ -61,6 +61,7 @@ export default function Type1({ navigation }) {
                     </TableWrapper>
                 </Table>
             </View>
+            <PreviousNextButton title="Tip 2" pageName="Tip 2" />
         </View>
     );
 }
