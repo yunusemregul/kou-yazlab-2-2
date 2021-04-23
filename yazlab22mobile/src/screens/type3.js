@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     ScrollView,
     StyleSheet, Text,
-    TextInput,
+
     TouchableOpacity,
     View
 } from 'react-native';
 import MySqlConnection from 'react-native-my-sql-connection';
 import { Row, Rows, Table, TableWrapper } from 'react-native-table-component';
 import { mysqlConfig } from '../../App';
-import PreviousNextButton from '../components/PreviousNextButton';
-import TextInputMask from 'react-native-text-input-mask';
+
+const GOOGLE_MAPS_APIKEY = 'GOOGLE_MAPS_API_KEY_REMOVED_FOR_PRIVACY_PUT_YOURS_HERE';
 
 export default function Type3({ navigation }) {
     const [queryResult, setQueryResult] = useState(null);
-    const [firstDate, setFirstDate] = useState(null);
-    const [secondDate, setSecondDate] = useState(null);
 
-    const query = `SELECT * FROM taxi WHERE (tpep_pickup_datetime >= '${firstDate || 'İLK TARİH BEKLENİYOR'}' AND tpep_pickup_datetime < '${secondDate || 'İKİNCİ TARİH BEKLENİYOR'}') ORDER BY trip_distance ASC LIMIT 5`;
-
+    const query = `SELECT tpep_pickup_datetime, tpep_dropoff_datetime, passenger_count, trip_distance, PULocationID, DOLocationID, total_amount, PUlatitude, PUlongitude, DOlatitude, DOlongitude FROM taxi t 
+	INNER JOIN (SELECT LocationID, latitude AS PUlatitude, longitude AS PUlongitude FROM taxi_zones) tz1 ON t.PULocationID = tz1.LocationID
+	INNER JOIN (SELECT LocationID, latitude AS DOlatitude, longitude AS DOlongitude FROM taxi_zones) tz2 ON t.DOLocationID = tz2.LocationID
+	WHERE 
+	trip_distance = (SELECT MIN(trip_distance) FROM taxi WHERE passenger_count >= 3)
+	OR trip_distance = (SELECT MAX(trip_distance) FROM taxi WHERE passenger_count >= 3);`
     async function runQuery() {
         try {
             const connection = await MySqlConnection.createConnection(mysqlConfig);
@@ -31,8 +33,7 @@ export default function Type3({ navigation }) {
         }
     }
 
-    const tableHead = ['tpep_pickup_datetime', 'tpep_dropoff_datetime', 'passenger_count', 'trip_distance', 'PULocationID', 'DOLocationID', 'total_amount'];
-    const textInputMask = "[0000]-[00]-[00] [00]:[00]:[00]"
+    const tableHead = ["tpep_pickup_datetime", "tpep_dropoff_datetime", "passenger_count", "trip_distance", "PULocationID", "DOLocationID", "total_amount", "PUlatitude", "PUlongitude", "DOlatitude", "DOlongitude"];
 
     return (
         <View style={styles.mainContainer}>
@@ -47,12 +48,21 @@ export default function Type3({ navigation }) {
                 <TouchableOpacity onPress={runQuery} style={{ backgroundColor: '#111', padding: 12, borderWidth: 1 }}>
                     <Text style={{ color: '#0e9594', fontWeight: 'bold' }}>MySQL isteğini çalıştır</Text>
                 </TouchableOpacity>
+                {
+                    queryResult && (
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('Tip 3 Harita');
+                        }} style={{ backgroundColor: '#111', padding: 12, borderWidth: 1, marginTop: 6 }}>
+                            <Text style={{ color: '#0e9594', fontWeight: 'bold' }}>Haritada Göster</Text>
+                        </TouchableOpacity>
+                    )
+                }
             </View>
             <ScrollView horizontal={true} style={{ marginBottom: 12 }}>
                 <ScrollView>
                     <View style={{ paddingLeft: 12, paddingRight: 12 }}>
                         <Table borderStyle={{ borderWidth: 1 }}>
-                            <Row data={tableHead} widthArr={[170, 170, 170, 170, 170, 170, 170]} style={tableStyle.head} textStyle={tableStyle.headText} />
+                            <Row data={tableHead} widthArr={[170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170]} style={tableStyle.head} textStyle={tableStyle.headText} />
                             <TableWrapper style={tableStyle.wrapper}>
                                 <Rows data={queryResult ? queryResult.map((value, index) => {
                                     let toReturn = [];
@@ -65,7 +75,7 @@ export default function Type3({ navigation }) {
                                     }
 
                                     return toReturn;
-                                }) : []} widthArr={[170, 170, 170, 170, 170, 170, 170]} style={tableStyle.row} textStyle={tableStyle.text} />
+                                }) : []} widthArr={[170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170]} style={tableStyle.row} textStyle={tableStyle.text} />
                             </TableWrapper>
                         </Table>
                     </View>

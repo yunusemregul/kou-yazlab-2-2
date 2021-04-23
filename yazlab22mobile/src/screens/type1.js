@@ -9,7 +9,7 @@ import { Row, Rows, Table, TableWrapper } from 'react-native-table-component';
 import { mysqlConfig } from '../../App';
 import PreviousNextButton from '../components/PreviousNextButton';
 
-const query = 'SELECT tpep_pickup_datetime, trip_distance FROM taxi ORDER BY trip_distance DESC LIMIT 5';
+const query = 'SELECT tpep_pickup_datetime, trip_distance FROM taxi ORDER BY trip_distance DESC LIMIT 5;';
 
 export default function Type1({ navigation }) {
     const [queryResult, setQueryResult] = useState(null);

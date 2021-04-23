@@ -17,7 +17,7 @@ export default function Type2({ navigation }) {
     const [firstDate, setFirstDate] = useState(null);
     const [secondDate, setSecondDate] = useState(null);
 
-    const query = `SELECT * FROM taxi WHERE (tpep_pickup_datetime >= '${firstDate || 'İLK TARİH BEKLENİYOR'}' AND tpep_pickup_datetime < '${secondDate || 'İKİNCİ TARİH BEKLENİYOR'}') ORDER BY trip_distance ASC LIMIT 5`;
+    const query = `SELECT * FROM taxi WHERE (tpep_pickup_datetime >= '${firstDate || 'İLK TARİH BEKLENİYOR'}' AND tpep_pickup_datetime < '${secondDate || 'İKİNCİ TARİH BEKLENİYOR'}') ORDER BY trip_distance ASC LIMIT 5;`;
 
     async function runQuery() {
         try {
