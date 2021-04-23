@@ -1,6 +1,25 @@
 import csv
 from datetime import datetime
 
+taxiZones = []
+
+istenenColumns = ["LocationID","zone","longitude","latitude"]
+
+with open('taxi_zones.csv') as csvFile:
+    reader = csv.DictReader(csvFile)
+
+    for row in reader:
+        row = {key:value for key,value in row.items() if key in istenenColumns}
+        taxiZones.append(row)
+
+with open('taxi_zones_filtered.csv', 'w', newline='') as csvFile:
+    writer = csv.DictWriter(csvFile, fieldnames=istenenColumns)
+
+    # writer.writeheader()
+
+    for veri in taxiZones:
+        writer.writerow(veri)
+
 istenenColumns = ["tpep_pickup_datetime", "tpep_dropoff_datetime", "passenger_count", "trip_distance", "PULocationID", "DOLocationID", "total_amount"]
 
 verimiz = list()
@@ -44,7 +63,7 @@ with open('yellow_tripdata_2020-12.csv') as csvFile:
 with open('verimiz.csv', 'w', newline='') as csvFile:
     writer = csv.DictWriter(csvFile, fieldnames=istenenColumns)
 
-    writer.writeheader()
+    # writer.writeheader()
 
     for veri in verimiz:
         writer.writerow(veri)
