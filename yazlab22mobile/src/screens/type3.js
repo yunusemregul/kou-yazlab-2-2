@@ -10,8 +10,6 @@ import MySqlConnection from 'react-native-my-sql-connection';
 import { Row, Rows, Table, TableWrapper } from 'react-native-table-component';
 import { mysqlConfig } from '../../App';
 
-const GOOGLE_MAPS_APIKEY = 'GOOGLE_MAPS_API_KEY_REMOVED_FOR_PRIVACY_PUT_YOURS_HERE';
-
 export default function Type3({ navigation }) {
     const [queryResult, setQueryResult] = useState(null);
 
@@ -51,7 +49,9 @@ export default function Type3({ navigation }) {
                 {
                     queryResult && (
                         <TouchableOpacity onPress={() => {
-                            navigation.navigate('Tip 3 Harita');
+                            navigation.navigate('Tip 3 Harita', {
+                                queryResult
+                            });
                         }} style={{ backgroundColor: '#111', padding: 12, borderWidth: 1, marginTop: 6 }}>
                             <Text style={{ color: '#0e9594', fontWeight: 'bold' }}>Haritada Göster</Text>
                         </TouchableOpacity>
